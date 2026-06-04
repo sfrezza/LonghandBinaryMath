@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section xml:id="sec-characters-strings" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Meaning From Bits: Characters and Strings</title>
+
+  <p>Interpreting binary bits as strings has been a primary use for computers. 
+    Every character stored in a file, in a database or streamed onto the internet, including the characters you are reading now are merely binary bits that are interpreted as strings.</p>
+
+
+</section>

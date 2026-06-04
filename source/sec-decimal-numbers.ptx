@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section xml:id="sec-decimal-numbers" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Meaning From Bits: Decimal Numbers</title>
+
+  <p>Interpreting binary bits as numbers can take multiple forms. 
+    The oldest and most leveraged number format is the integer.</p>
+
+
+    <exercise label="binary-decimal-conversion-01">
+  <title>Understanding number formats: Making meaning of bits</title>
+  <dynamic>
+    <statement> 
+      <interactive label="doe-bin-dec-conv-01" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/bin-dec-conv-01.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+some text
+
+    <exercise label="binary-decimal-conversion-02">
+  <title>Understanding number formats: Making meaning of bits</title>
+  <dynamic>
+    <statement> 
+      <interactive label="doe-bin-dec-conv-02" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/bin-dec-conv-02.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+    <exercise label="signed-binary-01">
+  <title>Understanding number formats: Negative Numbers</title>
+  <dynamic>
+    <statement> 
+      <interactive label="doe-twos-comp-01" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/twos-comp-01.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+</section>

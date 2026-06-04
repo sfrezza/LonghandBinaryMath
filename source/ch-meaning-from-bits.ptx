@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<chapter xml:id="ch-meaning-from-bits" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Making Meanings from Bit Representations</title>
+
+  <introduction>
+    <p> The central innovation that led to the successful development of the computer was the understanding of binary as a fundamental means of transforming meaning.
+      Binary decisions are significantly less expensive and faster than analog/continuous ones, and have proven to be implementable in multiple technologies, from vacuum tubes, to transistors to integrated circuits and even optics.
+      The key to this usefulness is the work of the computing machine, both as a binary instruction, and as the data that the instruction aims to manipulate. 
+      In both cases, the question is the interpretation of meaning: The meaning of the bits as data, and the meaning of the bits as instructions.
+     </p>
+<p>
+  Binary operations in a computer are built from the understanding of how the mathematics actually work; 
+    When using the CPU, there are specific instructions that the <term>machine codes</term> that the computer hardware responds to. 
+    This is the purpose of a <term>computer architecture</term>, to support the reading of instructions as machine codes, execute those instructions, and manipulate the data based on those the instructions.
+
+</p>
+
+  </introduction>
+  <p>
+    Binary bits have no meaning in themselves, their only meaning is the meaning encoded in the hardware to interpret machine codes and to manipulate data. 
+    Hence the interpretation of binary bits is central to every understanding of how a computer works.
+    While there is a deep and long history to each of these topics, four classic types of bit interpretations: Numbers, specifically Integer Numbers, Floating-Point Numbers, Characters (and hence strings), and Instructions. 
+    Each of the following brief chapters introduces a common style of interpreting bits, along with interactive exercises to aid understanding and application.
+  </p>
+
+  <!-- include sections -->
+   <!-- Bits and Bytes. -->
+  <xi:include href="sec-decimal-numbers.ptx" />
+  <xi:include href="sec-characters-strings.ptx" />
+  <!-- Floating Point. -->
+   <!-- Instructions. -->
+</chapter>

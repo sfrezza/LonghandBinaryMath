@@ -1,0 +1,112 @@
+<example name="Decimal_conversion"><title>Unsigned Decimal-Binary Conversion: </title>
+<p>When converting to binary, an immediate concern is how many bits are needed to convert the number. In general, the number of bits needed to convert an integer <m>x</m> is <m>Log_2(x) + 1</m> (truncated). E.g., <m>Log_2(63_{10})</m> = 5.977 or 6 bits.</p>
+
+  <p> This is accomplished by successively dividing the integer by 2 (rounding down) and noting the remainder. Continue dividing the resulting dividend until the result is zero. </p>
+    <p>Enter a value <m>0 ≤ x ≤ 255 </m>  
+ <answer>
+   <mathInput name="userNumber" prefill="1"/>
+   <award>
+     <when>$userNumber >= 0 and $userNumber <= 255 </when>
+   </award>
+ </answer>
+  to convert into unsigned 8-bit binary: </p>
+
+
+<m>$userNumber \div 2 = </m> <integer name="quotient0"> ($userNumber-0.1)/2</integer>  rem <alert>$bit0</alert> (bit<m>_0</m>)<br/>
+<m>$quotient0 \div 2 = </m> <integer name="quotient1"> ($quotient0-0.1)/2</integer> rem <alert>$bit1</alert> (bit<m>_1</m>)<br/>
+<m>$quotient1 \div 2 = </m><integer name="quotient2"> ($quotient1-0.1)/2</integer> rem <alert>$bit2</alert> (bit<m>_2</m>) <br/>
+<m>$quotient2 \div 2 = </m><integer name="quotient3"> ($quotient2-0.1)/2</integer> rem <alert>$bit3</alert> (bit<m>_3</m>) <br/>
+<m>$quotient3 \div 2 = </m><integer name="quotient4"> ($quotient3-0.1)/2</integer> rem <alert>$bit4</alert> (bit<m>_4</m>) <br/>
+<m>$quotient4 \div 2 = </m><integer name="quotient5"> ($quotient4-0.1)/2</integer> rem <alert>$bit5</alert> (bit<m>_5</m>) <br/>
+<m>$quotient5 \div 2 = </m><integer name="quotient6"> ($quotient5-0.1)/2</integer> rem <alert>$bit6</alert> (bit<m>_6</m>) <br/>
+<m>$quotient6 \div 2 = </m><integer name="quotient7"> ($quotient6-0.1)/2</integer> rem <alert>$bit7</alert> (bit<m>_7</m>) <br/>
+  
+  <setup>
+  <p>
+    <integer name="bit7"> <mod>$quotient6 2</mod></integer>
+    <integer name="bit6"> <mod>$quotient5 2</mod></integer>
+    <integer name="bit5"> <mod>$quotient4 2</mod></integer>
+    <integer name="bit4"> <mod>$quotient3 2</mod></integer>
+    <integer name="bit3"> <mod>$quotient2 2</mod></integer>
+    <integer name="bit2"> <mod>$quotient1 2</mod></integer>
+    <integer name="bit1"> <mod>$quotient0 2</mod></integer>
+    <integer name="bit0"> <mod>$userNumber 2</mod></integer>
+  </p>
+  </setup>
+  Assembled in binary: <alert> <m> $bit7 $bit6 $bit5 $bit4 $bit3 $bit2 $bit1 $bit0 _2</m></alert>
+</example>
+
+<problem> <title>Try It:</title>
+    <setup>
+    <p><numberList name="randBList">
+      <sampleRandomNumbers name="randBValues" from="0" to="255" numSamples="1" />
+</numberList></p>
+    <integer name="randomDecimal">$randBList[1]</integer>
+  </setup>
+  
+  <p>Convert the  value <m>x = $randomDecimal </m> (where 0 ≥ x ≤ 255) into an 8-bit binary:  
+
+  <triggerSet>
+    <callAction actionName="resample" target="$randBValues"/>
+      <label>Get New Decimal</label>
+  </triggerSet></p>
+
+<m>$randomDecimal \div 2 = </m> <integer name="quo0"> ($randomDecimal-0.1)/2</integer>  rem <alert>$bitV0</alert> <br/>
+<m>$quo0 \div 2 = </m> <integer name="quo1"> ($quo0-0.1)/2</integer> rem <alert>$bitV1</alert> <br/>
+<m>$quo1 \div 2 = </m><integer name="quo2"> ($quo1-0.1)/2</integer> rem <alert>$bitV2</alert> <br/>
+<m>$quo2 \div 2 = </m><integer name="quo3"> ($quo2-0.1)/2</integer> rem <alert>$bitV3</alert>  <br/>
+<m>$quo3 \div 2 = </m><integer name="quo4"> ($quo3-0.1)/2</integer> rem <alert>$bitV4</alert>  <br/>
+<m>$quo4 \div 2 = </m><integer name="quo5"> ($quo4-0.1)/2</integer> rem <alert>$bitV5</alert> <br/>
+<m>$quo5 \div 2 = </m><integer name="quo6"> ($quo5-0.1)/2</integer> rem <alert>$bitV6</alert>  <br/>
+<m>$quo6 \div 2 = </m><integer name="quo7"> ($quo6-0.1)/2</integer> rem <alert>$bitV7</alert> <br/>
+  
+  <setup>
+  <p>
+    <integer name="bitV7"> <mod>$quo6 2</mod></integer>
+    <integer name="bitV6"> <mod>$quo5 2</mod></integer>
+    <integer name="bitV5"> <mod>$quo4 2</mod></integer>
+    <integer name="bitV4"> <mod>$quo3 2</mod></integer>
+    <integer name="bitV3"> <mod>$quo2 2</mod></integer>
+    <integer name="bitV2"> <mod>$quo1 2</mod></integer>
+    <integer name="bitV1"> <mod>$quo0 2</mod></integer>
+    <integer name="bitV0"> <mod>$randomDecimal 2</mod></integer>
+  </p>
+  </setup>
+  
+ <answer>
+   <mathInput name="userBit7" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit6" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit5" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit4" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit3" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit2" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit1" minWidth="2.5" prefill="0"/>
+   <mathInput name="userBit0" minWidth="2.5" prefill="0"/>
+ 
+   <award name="bitOrdering">
+     <when>
+       <and> $bit7Good $bit6Good $bit5Good $bit4Good $bit3Good $bit2Good $bit1Good $bit0Good </and>
+     </when>
+   </award>
+ </answer>
+
+
+<setup>
+  <boolean name="bit7Good" allowedErrorInNumbers="0.01">
+  $userBit7 = $bitV7</boolean>
+  <boolean name="bit6Good" allowedErrorInNumbers="0.01">
+  $userBit6 = $bitV6</boolean>
+  <boolean name="bit5Good" allowedErrorInNumbers="0.01">
+  $userBit5 = $bitV5</boolean>
+  <boolean name="bit4Good" allowedErrorInNumbers="0.01">
+  $userBit4 = $bitV4</boolean>
+  <boolean name="bit3Good" allowedErrorInNumbers="0.01">
+  $userBit3 = $bitV3</boolean>
+  <boolean name="bit2Good" allowedErrorInNumbers="0.01">
+  $userBit2 = $bitV2</boolean>
+  <boolean name="bit1Good" allowedErrorInNumbers="0.01">
+  $userBit1 = $bitV1</boolean>
+  <boolean name="bit0Good" allowedErrorInNumbers="0.01">
+  $userBit0 = $bitV0</boolean>
+</setup>
+</problem>

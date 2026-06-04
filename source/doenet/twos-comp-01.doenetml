@@ -1,0 +1,228 @@
+<!--************************************************************
+Author: Steve Frezza
+Franciscan University of Steubenville
+Dept. of Engineering and Computing
+Last edited: 06/2026
+****************************************************************
+-->
+<title>Signed Binary: 2's Complement </title>
+<example name="NegativeNumbers"><title>Signed Binary Example: <m> $B7 $B6 $B5 $B4 $B3 $B2 $B1 $B0 _2 </m></title>
+  <p>The difficulty with binary is that interesting numbers are not just postive integers.</p>
+
+  <setup>
+    <p><numberList name="randBList">
+      <sampleRandomNumbers name="randBValues" from="0" to="1" numSamples="8" />
+</numberList></p>
+    <integer name="B0">$randBList[1]</integer>
+    <integer name="B1">$randBList[2]</integer>
+    <integer name="B2">$randBList[3]</integer>
+    <integer name="B3">$randBList[4]</integer>
+    <integer name="B4">$randBList[5]</integer>
+    <integer name="B5">$randBList[6]</integer>
+    <integer name="B6">$randBList[7]</integer>
+    <integer name="B7">$randBList[8]</integer>
+    <integer name="BConv2Decimal">($B7 * 128)+($B6 * 64)+($B5 * 32)+($B4 * 16)+($B3 * 8)+ ($B2 * 4) +($B1 * 2) + $B0 </integer>
+      <p><m> $B5 $B4 $B3 $B2 $B1 $B0 _2 </m></p>
+  </setup>
+  
+
+<p>When we write numbers in mathematics, the symbol for a minus sign is easily placed in front of the number, e.g., <m>- $B7 $B6 $B5 $B4 $B3 $B2 $B1 $B0 _2 </m>; (<m>- $BConv2Decimal _{10}</m>) This is strictly symbolic and not helpful for automation (e.g. binary formats used in computers). Consequently different negative binary formats were developed. For reasons of efficiency in storage and conversion, the standard in use for integers is the <term>Two's Complement</term> format. </p>
+
+    
+  <p>The two's complement format has a numerous advantages: (8-bit examples)</p>
+  <ul>
+  <li><em>Zero is always the same</em>: All bits are zeros. In eight bits <c><m>00000000_2 = 0_{10}</m></c>.</li>
+  <li><em>Every bit pattern gets used</em>: (e.g., eight bits yields 256 patterns) equates to a unique signed number.</li>
+  <li><em>Max value</em>: The maximum (positive) representable value is when the most significant bit (MSB) is '0', and all of the least significant bits (LSBs) are '1'. E.g., in eight bits <c><m>01111111_2 = +127_{10}</m></c>.</li>
+  <li> <em>Min value</em>: The minimum value is when the MSB is '1' and all of the LSBs are '0'. E.g., in eithg bits <c><m>10000000_2 = \neg128_{10}</m></c>.</li>
+  <li><em>Symetry</em>: Taking the 2's complement of a number is symetric: e.g., it can be computed from either a positive or a negative value, and 'taking' the 2's complement of a number twice results in the same number.</li>
+</ul>
+</example>
+<p>Two's Complement is firstly a number format: a means to interpret the meaning of a particular string of bits. Secondly, the term "Two's Complement" can be used as a verb; it defines the rules by which a binary string is converted to a signed integer/decimal number. Hence, in nearly all commercial computers, the "Integer" (INT) format is some number of bits interpretted as a two's complement number.</p>
+
+  <definition boxed><title>Two's Complement Interpretation</title>
+  <ul>
+  <li> If the leading bit is a 1, then the number is negative. To find the value, invert (flip) each of the bits and add one.</li>
+  <li> Otherwise, the number is positive, and the value is computed just as with unsigned numbers.</li>
+    </ul>
+  </definition>
+  <p></p>
+  
+<definition boxed><title>2's Complement Conversion</title>
+  to 'take' the Two's Complement:
+  <ul>
+    <li> Invert (flip) each of the bits and </li>
+    <li>add one.</li>
+    </ul>  
+  <em>Note</em>: to 'take' the two's complement is the equivalent of negating that number; so taking the two's complement twice should result in the same bit sequence that the operation started with.
+  </definition>
+  
+<setup>  
+  <integer name="decimalEquiv"> $bit0 + 2*$bit1 + 4*$bit2 + 8*$bit3 + 16*$bit4 + 32*$bit5 + 64*$bit6 + 128*$bit7</integer>
+
+
+<p> Inverted bits:
+    <integer name="invBit7"> <number convertBoolean><boolean>$B7 = 0</boolean></number></integer>
+    <integer name="invBit6"> <number convertBoolean><boolean>$B6 = 0</boolean></number></integer>
+    <integer name="invBit5"> <number convertBoolean><boolean>$B5 = 0</boolean></number></integer>
+    <integer name="invBit4"> <number convertBoolean><boolean>$B4 = 0</boolean></number></integer>
+    <integer name="invBit3"> <number convertBoolean><boolean>$B3 = 0</boolean></number></integer>
+    <integer name="invBit2"> <number convertBoolean><boolean>$B2 = 0</boolean></number></integer>
+    <integer name="invBit1"> <number convertBoolean><boolean>$B1 = 0</boolean></number></integer>
+    <integer name="invBit0"> <number convertBoolean><boolean>$B0 = 0</boolean></number></integer>
+</p>
+
+  <integer name="invDecimalEquiv"> $invBit0 + 2*$invBit1 + 4*$invBit2 + 8*$invBit3 + 16*$invBit4 + 32*$invBit5 + 64*$invBit6 + 128*$invBit7 + 1 </integer> 
+
+</setup>
+
+<setup>
+  <integer name="negQuo0"> ($invDecimalEquiv-0.1)/2</integer>
+  <integer name="negQuo1"> ($negQuo0-0.1)/2</integer>
+  <integer name="negQuo2"> ($negQuo1-0.1)/2</integer>
+  <integer name="negQuo3"> ($negQuo2-0.1)/2</integer>
+  <integer name="negQuo4"> ($negQuo3-0.1)/2</integer>
+  <integer name="negQuo5"> ($negQuo4-0.1)/2</integer>
+  <integer name="negQuo6"> ($negQuo5-0.1)/2</integer>
+</setup>
+
+  <alert>Practice:</alert>
+  <p> <alert>Consider the 8-bit number: <c><m> $B7 $B6 $B5 $B4 $B3 $B2 $B1 $B0 _2 </m></c> </alert><br/><br/>
+    Q: What is the interpretation of this bit pattern as a signed integer?</p>
+
+      A: The MSB is <alert>$B7</alert>, so 
+      <conditionalContent>
+      <case  condition="$B7=0"><ul>
+        <li>The sign is <m>+</m></li>
+        <li>The magnitude is LSBs interpreted as an unsigned integer. <c><m>$B6 $B5 $B4 $B3 $B2 $B1 $B0 _2 </m></c></li>
+        <li>Interpretted as <m>$unsignedDecimalEquiv _{10}</m></li>
+      </ul>
+      </case>
+      <else> <ul>
+        <li>Sign is <m>-</m></li> 
+        <li>The magnitude is determined by taking the two's complement:<br/>
+          Flip all of the bits: <c><m>$invBit7 $invBit6 $invBit5 $invBit4 $invBit3 $invBit2 $invBit1 $invBit0 _2 </m></c></li>
+        <li>Add 1: <c><m>$Sum_7 $Sum_6 $Sum_5 $Sum_4 $Sum_3 $Sum_2 $Sum_1 $Sum_0 _2 </m></c></li>
+        <li>Interpretted as <m>$unsignedDecimalEquiv _{10}</m></li>
+      </ul>
+      </else>
+    </conditionalContent>
+<p><triggerSet>
+  <callAction actionName="resample" target="$randBValues"/>
+  <label>Try New Bit Values</label>
+</triggerSet></p>
+      
+  
+  
+  <ul>
+    <setup>
+Take the 2s Complement: <c><m>
+    <integer name="negBit7"> <mod>$negQuo6 2</mod></integer>
+    <integer name="negBit6"> <mod>$negQuo5 2</mod></integer>
+    <integer name="negBit5"> <mod>$negQuo4 2</mod></integer>
+    <integer name="negBit4"> <mod>$negQuo3 2</mod></integer>
+    <integer name="negBit3"> <mod>$negQuo2 2</mod></integer>
+    <integer name="negBit2"> <mod>$negQuo1 2</mod></integer>
+    <integer name="negBit1"> <mod>$negQuo0 2</mod></integer>
+    <integer name="negBit0"> <mod>$invDecimalEquiv 2</mod></integer>_2</m> (<conditionalContent condition="$signedDecimalEquiv>0"><m>+</m></conditionalContent><m>$signedDecimalEquiv _{10}</m>)
+</c> 
+</setup>
+    
+</ul>
+  
+  <setup>
+  <m> <integer name="unsignedDecimalEquiv"> ($B0 + 2*$B1 + 4*$B2 + 8*$B3 + 16*$B4 + 32*$B5 + 64*$B6 + 128*$B7) * <number convertBoolean> <boolean>$B7 <= 0</boolean></number> -
+($negBit0 + 2*$negBit1 + 4*$negBit2 + 8*$negBit3 + 16*$negBit4 + 32*$negBit5 + 64*$negBit6 + 128*$negBit7)
+  * <number convertBoolean> <boolean>$B7 > 0</boolean></number></integer>_{10}</m>
+
+ <m> <integer name="signedDecimalEquiv"> ($negBit0 + 2*$negBit1 + 4*$negBit2 + 8*$negBit3 + 16*$negBit4 + 32*$negBit5 + 64*$negBit6 + 128*$negBit7) * <number convertBoolean> <boolean>$negBit7 <= 0</boolean></number> -
+($B0 + 2*$B1 + 4*$B2 + 8*$B3 + 16*$B4 + 32*$B5 + 64*$B6 + 128*$B7)
+  * <number convertBoolean> <boolean>$negBit7 > 0</boolean></number></integer>_{10}</m>
+  </setup>
+
+
+
+
+<setup>
+<!-- The bitwise addition at the bottom appears to work, but it is uninteresting as it only adds the number and its complement, which should always be all zeros. -->
+
+<!--
+<p>Addend A</p>
+    <boolean name="A_0"> $bit0</boolean>
+    <boolean name="A_1"> $bit1</boolean>
+    <boolean name="A_2"> $bit2</boolean>
+    <boolean name="A_3"> $bit3</boolean>
+    <boolean name="A_4"> $bit4</boolean>
+    <boolean name="A_5"> $bit5</boolean>
+    <boolean name="A_6"> $bit6</boolean>
+    <boolean name="A_7"> $bit7</boolean> 
+
+<p>Addend B</p>
+    <boolean name="B_0"> $negBit0</boolean>
+    <boolean name="B_1"> $negBit1</boolean>
+    <boolean name="B_2"> $negBit2</boolean>
+    <boolean name="B_3"> $negBit3</boolean>
+    <boolean name="B_4"> $negBit4</boolean>
+    <boolean name="B_5"> $negBit5</boolean>
+    <boolean name="B_6"> $negBit6</boolean>
+    <boolean name="B_7"> $negBit7</boolean> 
+-->
+  <p>Addend A</p>
+      <boolean name="A_7"> $invBit7</boolean> 
+      <boolean name="A_6"> $invBit6</boolean>
+      <boolean name="A_5"> $invBit5</boolean>
+      <boolean name="A_4"> $invBit4</boolean>
+      <boolean name="A_3"> $invBit3</boolean>
+      <boolean name="A_2"> $invBit2</boolean>
+      <boolean name="A_1"> $invBit1</boolean>
+      <boolean name="A_0"> $invBit0</boolean>
+
+
+<p>Addend B</p>
+    <boolean name="B_0"> 0</boolean>
+    <boolean name="B_1"> 0</boolean>
+    <boolean name="B_2"> 0</boolean>
+    <boolean name="B_3"> 0</boolean>
+    <boolean name="B_4"> 0</boolean>
+    <boolean name="B_5"> 0</boolean>
+    <boolean name="B_6"> 0</boolean>
+    <boolean name="B_7"> 0</boolean> 
+
+<p>Carry In 
+  <boolean name="Cin"> true</boolean> </p>
+
+<p>Carry Bits:</p>
+<!--   co <= (i0 and i1) or (i0 and ci) or (i1 and ci); -->
+  <boolean name="C_7"> 
+   <or> <and>$A_7 $B_7</and> <and>$A_7 $C_6</and> <and>$B_7 $C_6</and> </or> </boolean>
+ <boolean name="C_6"> 
+   <or> <and>$A_6 $B_6</and> <and>$A_6 $C_5</and> <and>$B_6 $C_5</and></or> </boolean>
+  <boolean name="C_5"> 
+    <or> <and>$A_5 $B_5</and> <and>$A_5 $C_4</and> <and>$B_5 $C_4</and></or> </boolean>
+  <boolean name="C_4"> 
+    <or> <and>$A_4 $B_4</and> <and>$A_4 $C_3</and> <and>$B_4 $C_3</and></or> </boolean>
+  <boolean name="C_3"> 
+    <or> <and>$A_3 $B_3</and> <and>$A_3 $C_2</and> <and>$B_3 $C_2</and></or> </boolean>
+  <boolean name="C_2"> 
+    <or> <and>$A_2 $B_2</and> <and>$A_2 $C_1</and> <and>$B_2 $C_1</and></or> </boolean>
+  <boolean name="C_1"> 
+    <or> <and>$A_1 $B_1</and> <and>$A_1 $C_0</and> <and>$B_1 $C_0</and> </or> </boolean>
+  <boolean name="C_0"> 
+    <or> <and>$A_0 $B_0</and> <and>$A_0 $Cin</and> <and>$B_0 $Cin</and> </or> </boolean>
+
+
+
+<p>8-bit sum of A and B: <c>
+ <integer name="Sum_7" convertBoolean><boolean> <xor> <xor> $A_7 $B_7</xor> $C_6 </xor></boolean> </integer>
+  <integer name="Sum_6" convertBoolean><boolean> <xor> <xor>$A_6 $B_6</xor>  $C_5</xor> </boolean> </integer>
+  <integer name="Sum_5" convertBoolean><boolean> <xor> <xor>$A_5 $B_5</xor> $C_4</xor> </boolean> </integer>
+  <integer name="Sum_4" convertBoolean><boolean> <xor> <xor>$A_4 $B_4</xor> $C_3</xor> </boolean> </integer>
+  <integer name="Sum_3" convertBoolean><boolean> <xor> <xor>$A_3 $B_3</xor> $C_2</xor> </boolean> </integer>
+  <integer name="Sum_2" convertBoolean><boolean> <xor> <xor>$A_2 $B_2</xor> $C_1 </xor> </boolean> </integer>
+  <integer name="Sum_1" convertBoolean><boolean> <xor> <xor>$A_1 $B_1</xor> $C_0 </xor> </boolean> </integer>
+  <integer name="Sum_0" convertBoolean><boolean> <xor> <xor>$A_0 $B_0</xor> $Cin </xor> </boolean> </integer>
+</c>
+</p>
+Carry out of the sum: <number name="CarryOut" convertBoolean><boolean>$C_7</boolean></number>
+
+</setup>
