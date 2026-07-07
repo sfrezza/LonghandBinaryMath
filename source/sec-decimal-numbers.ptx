@@ -43,7 +43,7 @@ some text
     <statement> 
       <interactive label="doe-twos-comp-01" platform="doenetml">
         <slate surface="doenetml">  
-          <xi:include href="doenet/twos-comp-01.doenetml" parse="text"/>
+          <xi:include href="doenet/twos-comp-01.ml" parse="text"/>
         </slate>  
       </interactive> 
     </statement>
