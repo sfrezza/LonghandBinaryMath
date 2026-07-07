@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section xml:id="sec-decimal-numbers" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Meaning From Bits: Decimal Numbers</title>
+
+  <p>Interpreting binary bits as numbers can take multiple forms. 
+    The oldest and most leveraged number format is the integer.</p>
+    
+This may take time to load. Please be patient.
+<exercise label="ASCII-Hello-World">
+  <title>"Hello World" as ASCII Characters</title>
+  <dynamic>
+    <statement> 
+      <interactive label="doe-ASCII-Hello-World-01" platform="ml">
+        <slate surface="ml">  
+          <xi:include href="/ASCII-Assignment.ml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+</section>
