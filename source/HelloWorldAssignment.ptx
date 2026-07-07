@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- to build: pretext build HellowWorld-SCORM where this tag is identified in the "project.ptx" file -->
+<pretext>
+    <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <title>Assignment Title</title>
+
+         <exercise label="signed-binary-01">
+  <title>ASCII Representation</title>
+  <dynamic>
+    <statement> 
+        Please be patient while the ASCII assignment for "Hello World" is generated.  This may take a few seconds.  Once the representation is generated, you will be able to copy and paste it into your code editor.  You can then use this ASCII representation in your code to display "Hello World" in a console or terminal window.
+      <interactive label="ASCII-HelloWorld" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/ASCII-HelloWorld.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+    </article>
+</pretext>

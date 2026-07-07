@@ -1,0 +1,375 @@
+<!--************************************************************
+Author: Steve Frezza
+Franciscan University of Steubenville
+Dept. of Engineering and Computing
+Last edited: 06/2026
+****************************************************************
+-->
+
+<!-- This uses modules and <textList> elements to enable multiple numbers to be created/reused -->
+
+  <setup>
+<p>Base: <integer name="Base">16</integer></p> <!-- This should be ≤ 16 -->
+  <number name="noOfDigits">2</number>
+
+<p><selectFromSequence name="Addend_A" from="1" to="$Base^$noOfDigits"></selectFromSequence></p>
+<p><selectFromSequence name="Addend_B" from="1" to="$Base^$noOfDigits"></selectFromSequence></p>
+<p><selectFromSequence name="Addend_C" from="100" to="$Base^$noOfDigits"></selectFromSequence></p>
+
+<p><selectFromSequence name="Addend_D" from="($Base^$noOfDigits)/2" to="$Base^$noOfDigits"></selectFromSequence></p>
+    
+<number name="maxNumCarryAttempts">1</number>
+<number name="maxNumSumAttempts">1</number>
+    
+<textList name="digitLookup">
+      <text>0</text>
+      <text>1</text>
+      <text>2</text>
+      <text>3</text>
+      <text>4</text>
+      <text>5</text>
+      <text>6</text>
+      <text>7</text>
+      <text>8</text>
+      <text>9</text>
+      <text>a</text>
+      <text>b</text>
+      <text>c</text>
+      <text>d</text>
+      <text>e</text>
+      <text>f</text>
+</textList>
+    
+<module name="hexLookup">
+  <!-- Move from a hex digit to unsigned <integer> -->
+    <moduleAttributes>
+      <text name="input">"0"</text>
+    </moduleAttributes>
+    <setup>
+      <integer name="intConversion">$input</integer>
+    </setup>
+  <integer>
+  <conditionalContent>
+    <case condition="$input=A or $input=a">10</case>
+    <case condition="$input=B or $input=b">11</case>
+    <case condition="$input=C or $input=c">12</case>
+    <case condition="$input=D or $input=d">13</case>
+    <case condition="$input=E or $input=e">14</case>
+    <case condition="$input=F or $input=f">15</case>
+    <case condition="$intConversion >-1 and $intConversion<10"> $intConversion </case>
+    <else>-1</else>
+  </conditionalContent>
+  </integer>
+</module>
+    
+<!-- Move from a hex digit to inverted hex as <integer> 
+<module name="invertHex">
+    <moduleAttributes>
+      <text name="input">"0"</text>
+    </moduleAttributes>
+  <setup>
+    <integer name="intConversion">$input</integer>
+  </setup>
+  <integer>
+  <conditionalContent>
+    <case condition="$input=A or $input=a">5</case>
+    <case condition="$input=B or $input=b">4</case>
+    <case condition="$input=C or $input=c">3</case>
+    <case condition="$input=D or $input=d">2</case>
+    <case condition="$input=E or $input=e">1</case>
+    <case condition="$input=F or $input=f">0</case>
+    <case condition="$intConversion ≥0 and $intConversion<10"> 15-$intConversion </case>
+
+    <else>-1</else>
+  </conditionalContent>
+  </integer>
+</module>
+    -->
+
+  <module name="TwosCompHexSign">
+    <moduleAttributes>
+      <text name="input">"0"</text> <!-- sign neg is 'true' -->
+    </moduleAttributes>
+  <boolean>
+  <conditionalContent>
+    <case condition="$input=A or $input=a">true</case>
+    <case condition="$input=B or $input=b">true</case>
+    <case condition="$input=C or $input=c">true</case>
+    <case condition="$input=D or $input=d">true</case>
+    <case condition="$input=E or $input=e">true</case>
+    <case condition="$input=F or $input=f">true</case>
+    <case condition="$input=8">true</case>
+    <case condition="$input=9">true</case>
+    <else>false</else>
+  </conditionalContent>
+  </boolean>
+</module>
+  </setup>
+
+<setup>
+<module name="baseConversion"> 
+  <!-- This module generates 2 hex digits <textList> of whatever $input integer is provided, converted into the $Base. These are returned as a <textList> so the values can be used/displayed. -->
+    <moduleAttributes>
+      <integer name="base">16</integer>
+      <integer name="input">"0"</integer>
+      <numberList name="quotients">
+        <floor> $input / $base </floor>
+        <floor> ($quotients[1])/$base  </floor>
+      </numberList>
+      <numberList name="digitValues">
+        <integer><mod>$input $base</mod></integer>
+        <integer><mod>$quotients[1] $base</mod></integer>
+      </numberList>
+      
+      <!-- No referent found for reference: $digitLookup[ $digitValues[1]+1 ] -->
+      <textList name="digits">
+        $digitLookup[ $digitValues[1]+1 ] 
+        $digitLookup[ $digitValues[2]+1 ] 
+      </textList>
+    </moduleAttributes> <!-- These are reversed so they can be returned as a <textlist> -->
+      <textList> $digits[1] $digits[2] </textList>
+</module>
+</setup>
+
+<setup>
+<module name="controlBitComputation"> 
+  <!-- Computes four control bits C, Z, N, V as an ordered <BooleanList> from two addends -->
+    <moduleAttributes>
+      <integer name="base">16</integer>
+      <textList name="left"> 0 0</textList>
+      <textList name="right">0 a</textList>
+    </moduleAttributes>
+    <setup>
+      <p><boolean name="leftSign"> <module copy="$TwosCompHexSign" input="$left[2]"/> </boolean>
+      <boolean name="rightSign"><module copy="$TwosCompHexSign" input="$right[2]"/></boolean></p>
+
+      <p>Left/Right Hex Values: 
+        (<numberList name="leftValues">
+          <integer><module copy="$hexLookup" input="$left[1]"/> </integer>
+          <integer><module copy="$hexLookup" input="$left[2]"/> </integer>
+        </numberList>)
+        (<numberList name="rightValues">
+          <integer><module copy="$hexLookup" input="$right[1]"/> </integer>
+          <integer><module copy="$hexLookup" input="$right[2]"/></integer>
+        </numberList>   )</p>
+
+       <integer name="SumMSBValue">($rightValues[2] + $leftValues[2] + 
+          <floor>($rightValues[1] + $leftValues[1])/$base</floor>)</integer>
+ 
+        <p>Left: <c>$left[2] $left[1]</c>, Right: <c>$right[2] $right[1]</c></p>
+        <p>Carry Out: (<integer name="carryOut">
+          <floor>  $SumMSBValue / $base </floor></integer>)</p>
+        <p>Magnitude: (<numberList name="sumMagnitude">
+          <mod><integer>($rightValues[1] + $leftValues[1])</integer> $base</mod>
+          <mod>$SumMSBValue $base</mod></numberList>)</p>
+ 
+        <p> Conditions: 
+        C <boolean name="sumCarryOut">$carryOut=1</boolean>
+        Z <boolean name="sumZero">$sumMagnitude = 0</boolean>
+        N <boolean name="sumSign">$SumMSBValue ≥ 8</boolean>
+        V <boolean name="sumOverflow">($leftSign and $rightSign and not($sumSign)) or (not($leftSign) and not($rightSign) and $sumSign)</boolean></p>
+    </setup> <!-- Begin module six-item <numberList> output -->
+   <numberList>
+    $sumMagnitude[2] $sumMagnitude[1]
+    $carryOut                                             <!-- C Carry Out-->
+    <integer><conditionalContent>
+      <case condition="$sumZero">1</case>  <!-- Z Zero -->   
+      <else>0</else></conditionalContent>      </integer>                   
+    <integer><conditionalContent>
+      <case condition="$sumSign">1</case>   <!-- N Sign -->     
+      <else>0</else></conditionalContent></integer>
+    <integer><conditionalContent>
+      <case condition="$sumOverflow">1</case>  <!-- V Overflow -->
+      <else>0</else></conditionalContent></integer>
+    </numberList>
+</module>
+</setup>
+
+<setup>
+<!-- Four Addends -->
+  <p><textList name="addendAdigits"><module copy="$baseConversion" input="$Addend_A" base="$Base"/></textList></p>
+  <p><textList name="addendBdigits"><module copy="$baseConversion" input="$Addend_B" base="$Base"/></textList></p>
+  <p><textList name="addendCdigits"><module copy="$baseConversion" input="$Addend_C" base="$Base"/></textList></p>
+  <p><textList name="addendDdigits"><module copy="$baseConversion" input="$Addend_D" base="$Base"/></textList></p>
+
+<!-- Four Sum Results -->
+<p> <numberList name="SumABAnswer"><module copy="$controlBitComputation" left="$addendAdigits" right="$addendBdigits"/></numberList> </p>
+<p> <numberList name="SumBCAnswer"><module copy="$controlBitComputation" left="$addendBdigits" right="$addendCdigits"/></numberList> </p>
+<p> <numberList name="SumCDAnswer"><module copy="$controlBitComputation" left="$addendCdigits" right="$addendDdigits"/></numberList> </p>
+<p> <numberList name="SumDAAnswer"><module copy="$controlBitComputation" left="$addendDdigits" right="$addendAdigits"/></numberList> </p>
+</setup>
+
+<setup>
+<p><integer name="UnsumMagnitudeAB">$Addend_A + $Addend_B</integer></p>
+<p><integer name="UnsumMagnitudeBC">$Addend_B + $Addend_C</integer></p>
+<p><integer name="UnsumMagnitudeCD">$Addend_C + $Addend_D</integer></p>
+<p><integer name="UnsumMagnitudeDA">$Addend_D + $Addend_A</integer></p>
+  
+  <p><textList name="sumABDigits"><module copy="$baseConversion" input="$UnsumMagnitudeAB" base="$Base"/> </textList></p>
+  <p><textList name="sumBCDigits"><module copy="$baseConversion" input="$UnsumMagnitudeBC" base="$Base"/> </textList></p>
+  <p><textList name="sumCDDigits"><module copy="$baseConversion" input="$UnsumMagnitudeCD" base="$Base"/> </textList></p>
+  <p><textList name="sumDADigits"><module copy="$baseConversion" input="$UnsumMagnitudeDA" base="$Base"/> </textList></p>
+</setup>
+
+
+
+
+<p>Complete the following two 8-bit additions, computing the carry-out bit (C) from the computation, a sign-bit (N) a zero-bit (Z), and an overflow bit (V) indicating that the computation has exceeded the number format. </p>
+<tabular left="minor" right="minor" top="minor" bottom="minor" valign="middle" halign="center">
+  <row>
+  <cell colSpan="2"><m>Addend</m></cell>
+  <cell colSpan="2"><m>Addend</m></cell>
+  <cell colSpan="2"><m>Sum_{16} Digits</m></cell>
+  <cell><m>C</m></cell>
+    <cell><m>Z</m></cell>
+    <cell><m>N</m></cell>
+    <cell><m>V</m></cell>
+  </row>
+  <row> <!-- 1st Question -->
+    <cell colSpan="2"><m>$addendAdigits[2] $addendAdigits[1]_{16}</m></cell>
+    <cell colSpan="2"><m>$addendBdigits[2] $addendBdigits[1]_{16}</m></cell>
+    
+      <cell  colSpan="2">
+       <textInput name="ABSum1_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q1 Sum digit 1</shortDescription></textInput>
+       <textInput name="ABSum0_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q1 Sum digit 0</shortDescription></textInput></cell>
+    
+      <cell><mathInput minwidth="17" name="ABCarryOut_Ans" forAnswer="$ControlResponse"><shortDescription>Q1 Carry out bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="ABZeroBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q1 Zero bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="ABSignBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q1 Sign bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="ABOverflowBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q1 Overflow bit</shortDescription></mathInput></cell> 
+  </row>
+
+    <row> <!-- 2nd Question -->
+    <cell colSpan="2"><m>$addendBdigits[2] $addendBdigits[1]_{16}</m></cell>
+    <cell colSpan="2"><m>$addendCdigits[2] $addendCdigits[1]_{16}</m></cell>
+    
+      <cell  colSpan="2">
+       <textInput name="BCSum1_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q2 Sum digit 1</shortDescription></textInput>
+       <textInput name="BCSum0_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q2 Sum digit 0</shortDescription></textInput></cell>
+    
+      <cell><mathInput minwidth="17" name="BCCarryOut_Ans" forAnswer="$ControlResponse"><shortDescription>Q2 Carry out bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="BCZeroBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q2 Zero bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="BCSignBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q2 Sign bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="BCOverflowBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q2 Overflow bit</shortDescription></mathInput></cell> 
+  </row>
+  <row> <!-- 3rd Question -->
+    <cell colSpan="2"><m>$addendCdigits[2] $addendCdigits[1]_{16}</m></cell>
+    <cell colSpan="2"><m>$addendDdigits[2] $addendDdigits[1]_{16}</m></cell>
+    
+      <cell  colSpan="2">
+       <textInput name="CDSum1_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q3 Sum digit 1</shortDescription></textInput>
+       <textInput name="CDSum0_Resp" forAnswer="$SumResponse"  width="15"><shortDescription>Q3 Sum digit 0</shortDescription></textInput></cell>
+    
+      <cell><mathInput minwidth="17" name="CDCarryOut_Ans" forAnswer="$ControlResponse"><shortDescription>Q3 Carry out bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="CDZeroBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q3 Zero bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="CDSignBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q3 Sign bit</shortDescription></mathInput></cell> 
+      <cell><mathInput minwidth="17" name="CDOverflowBit_Ans" forAnswer="$ControlResponse"><shortDescription>Q3 Overflow bit</shortDescription></mathInput></cell> 
+  </row>  
+</tabular>
+
+<setup>
+<c>
+    <integer name="ABSum1_Ans"><module copy="$hexLookup" input="$ABSum1_Resp"/></integer>
+    <integer name="ABSum0_Ans"><module copy="$hexLookup" input="$ABSum0_Resp"/></integer>
+      <integer name="BCSum1_Ans"><module copy="$hexLookup" input="$BCSum1_Resp"/></integer>
+    <integer name="BCSum0_Ans"><module copy="$hexLookup" input="$BCSum0_Resp"/></integer>
+    <integer name="CDSum1_Ans"><module copy="$hexLookup" input="$CDSum1_Resp"/></integer>
+    <integer name="CDSum0_Ans"><module copy="$hexLookup" input="$CDSum0_Resp"/></integer>
+</c>
+</setup>
+
+<setup>
+  <!-- Check the AB  & BC responses -->
+<p>AB Responses: 
+  <boolean name="ABSumDigitsCorrect">
+  ($ABSum0_Ans = $SumABAnswer[2]) and ($ABSum1_Ans = $SumABAnswer[1]) </boolean>
+  <boolean name="ABCarryBitCorrect">($ABCarryOut_Ans = $SumABAnswer[3])</boolean>
+<boolean name="ABZeroBitCorrect"> ($ABZeroBit_Ans = $SumABAnswer[4])</boolean>
+<boolean name="ABSignBitCorrect"> ($ABSignBit_Ans = $SumABAnswer[5])
+</boolean>
+<boolean name="ABOverflowBitCorrect"> $ABOverflowBit_Ans = $SumABAnswer[6]</boolean></p>
+
+<p>BC Responses: 
+  <boolean name="BCSumDigitsCorrect">
+  ($BCSum0_Ans = $SumBCAnswer[2]) and ($BCSum1_Ans = $SumBCAnswer[1]) </boolean>
+  <boolean name="BCCarryBitCorrect">($BCCarryOut_Ans = $SumBCAnswer[3])</boolean>
+<boolean name="BCZeroBitCorrect"> $BCZeroBit_Ans = $SumBCAnswer[4]</boolean>
+<boolean name="BCSignBitCorrect"> $BCSignBit_Ans = $SumBCAnswer[5]
+</boolean>
+<boolean name="BCOverflowBitCorrect"> $BCOverflowBit_Ans = $SumBCAnswer[6]</boolean>
+</p>
+
+<p>CD Responses: 
+  <boolean name="CDSumDigitsCorrect">
+  ($CDSum0_Ans = $SumCDAnswer[2]) and ($CDSum1_Ans = $SumCDAnswer[1]) </boolean>
+  <boolean name="CDCarryBitCorrect">($CDCarryOut_Ans = $SumCDAnswer[3])</boolean>
+<boolean name="CDZeroBitCorrect"> $CDZeroBit_Ans = $SumCDAnswer[4]</boolean>
+<boolean name="CDSignBitCorrect"> $CDSignBit_Ans = $SumCDAnswer[5]
+</boolean>
+<boolean name="CDOverflowBitCorrect"> $CDOverflowBit_Ans = $SumCDAnswer[6]</boolean>
+</p>
+</setup>
+
+Sum digits: <answer name="SumResponse" submitLabel="Check Sum Digits" maxNumAttempts="$maxNumSumAttempts">
+    <award name="AllSumsCorrect" credit="1" matchBlanks="false">
+      <when>
+        $ABSumDigitsCorrect and $BCSumDigitsCorrect and ($CDSumDigitsCorrect)
+      </when></award>
+    <award name="TwoSumsCorrect" credit=".65" matchBlanks="false">
+      <when><or>
+        <and>($ABSumDigitsCorrect) and ($BCSumDigitsCorrect) not($CDSumDigitsCorrect)</and>
+        <and>($ABSumDigitsCorrect) and not($BCSumDigitsCorrect) ($CDSumDigitsCorrect)</and>
+        <and>not($ABSumDigitsCorrect) and ($BCSumDigitsCorrect) ($CDSumDigitsCorrect)</and>
+      </or></when></award>  
+    <award name="OneSumCorrect" credit=".3" matchBlanks="false">
+      <when><or>
+        <and>($ABSumDigitsCorrect) and not($BCSumDigitsCorrect) not($CDSumDigitsCorrect)</and>
+        <and>not($ABSumDigitsCorrect) and not($BCSumDigitsCorrect) ($CDSumDigitsCorrect)</and>
+        <and>not($ABSumDigitsCorrect) and ($BCSumDigitsCorrect) not($CDSumDigitsCorrect)</and>
+      </or></when></award>    
+  </answer><br/>
+
+  Control Bits: <answer name="ControlResponse" submitLabel="Check Control Bits" maxNumAttempts="$maxNumCarryAttempts">
+    <award name="AllThreeCorrect" credit="1" matchBlanks="false">
+      <when><and>$ABControlCorrect $BCControlCorrect $CDControlCorrect </and>
+      </when></award>
+        <award name="TwoOfThree" credit=".65" matchBlanks="false"><when><or>
+         <and>$ABControlCorrect $BCControlCorrect not($CDControlCorrect)  </and>
+         <and>$ABControlCorrect not($BCControlCorrect) ($CDControlCorrect)</and>
+         <and>not($ABControlCorrect) ($BCControlCorrect) ($CDControlCorrect)</and>
+       </or></when></award>
+     <award name="OneOfThree" credit=".33" matchBlanks="false"><when><or>
+         <and>$ABControlCorrect not($BCControlCorrect) not($CDControlCorrect)  </and>
+         <and>not($ABControlCorrect) ($BCControlCorrect) not($CDControlCorrect)</and>
+         <and>not($ABControlCorrect) not($BCControlCorrect) ($CDControlCorrect)</and>
+       </or></when></award> 
+  </answer><br/>
+
+<setup>
+<boolean name="ABControlCorrect">$ABOverflowBitCorrect and ($ABCarryBitCorrect) and ($ABSignBitCorrect) and $ABZeroBitCorrect </boolean>
+<boolean name="BCControlCorrect">$BCOverflowBitCorrect and ($BCCarryBitCorrect) and ($BCSignBitCorrect) and $BCZeroBitCorrect </boolean>
+<boolean name="CDControlCorrect">$CDOverflowBitCorrect and ($CDCarryBitCorrect) and ($CDSignBitCorrect) and $CDZeroBitCorrect </boolean>
+</setup>
+    <!-- Feedback
+
+
+<setup>
+<p>($ThreeOfFour) $MissedCarry $MissedZero $MissedSign $MissedOverflow</p>
+</setup>
+
+<feedback name="ControlBitFeedback" condition="$ThreeOfFour">
+  <p>
+    <conditionalContent>
+      <case condition="$MissedOverflow">Missed one of the four conditions: The sign of the sum is $signS so 
+        <conditionalContent>
+          <case condition="$MissedSign">Missed one of the four conditions: The overflow bit should be set because two positive numbers are added and the result is negative.</case>
+          <else>Missed one of the four conditions: The overflow bit should be set because two negative numbers were added and the result is positive. </else>
+        </conditionalContent>
+      </case>
+      <case condition="$MissedCarry">Missed one of the four conditions: The MS nibble sum of $addendAdigits[1] and $addendBdigits[1] should result in the carry out bit set to $SumC_1.</case>
+    <case condition="$MissedZero">Missed one of the four conditions: The sum should result in the zero bit (Z) set to $CorrectZbit </case>
+    <case condition="$MissedSign">Missed one of the four conditions: The MSB of the sum ($Sum1_Ans) should result in the sign bit (N) set to  $signS</case>
+    </conditionalContent>
+  </p></feedback>
+
+-->

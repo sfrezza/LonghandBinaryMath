@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- to build: pretext build Activity1-SCORM where this tag is identified in the "project.ptx" file -->
+<pretext>
+    <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <title>Assignment Title</title>
+
+         <exercise label="signed-binary-01">
+  <title>Understanding number formats: Negative Numbers</title>
+  <dynamic>
+    <statement> 
+      <interactive label="doe-twos-comp-01" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/twos-comp-01.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+    </article>
+</pretext>
