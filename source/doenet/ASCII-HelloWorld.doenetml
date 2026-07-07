@@ -1,7 +1,7 @@
 <!-- ASCII Assignment
      Steve Frezza, Franciscan University
      Last updated: 6/26 -->
-<!-- This displays a fragment of an ASCII table, and asks questions that use ASCII lookups in hex. -->
+<!-- This can display a fragment of an ASCII table, and asks questions that use ASCII lookups in hex. -->
 <setup>
   <integer name="maxAttempts">1</integer>
 <integer name="maxNumHelloAttempts">$maxAttempts</integer>
