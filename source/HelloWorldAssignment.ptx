@@ -9,7 +9,7 @@
   <caption>ASCII Table</caption>
   <image source="images/ascii01.png" width="70%"/>
 </figure>
-         <exercise label="ASCII-HelloWorld" platform="doenetml">
+         <exercise label="ASCII-HelloWorld-ex" platform="doenetml">
   <title>ASCII Representation</title>
   <dynamic>
     <statement> 
