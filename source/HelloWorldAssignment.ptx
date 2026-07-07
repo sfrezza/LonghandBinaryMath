@@ -3,8 +3,9 @@
 <pretext>
     <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
         <title>ASCII-HelloWorld</title>
-        Please be patient while the ASCII assignment for "Hello World" is generated.  This may take a few seconds.  Once the representation is generated, you will be able to copy and paste it into your code editor.  You can then use this ASCII representation in your code to display "Hello World" in a console or terminal window.
-
+        <p>Please be patient while the ASCII assignment for "Hello World" is generated.  
+            This may take a few seconds. Then respond to each question. </p>
+       
          <exercise label="signed-binary-01">
   <title>ASCII Representation</title>
   <dynamic>
