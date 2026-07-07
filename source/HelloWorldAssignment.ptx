@@ -5,11 +5,11 @@
         <title>ASCII-HelloWorld</title>
       <p>Please be patient while the ASCII assignment for "Hello World" is generated.  
             This may take a few seconds. Then respond to each question in hexadecimal. </p>
-       <figure xml:id="fig-ASCII">
-  <caption>ASCII Table</caption>
-  <image source="images/ascii01.png" width="70%"/>
-</figure>
-         <exercise label="ASCII-HelloWorld-ex" platform="doenetml">
+        <figure xml:id="fig-ASCII">
+          <caption>ASCII Translation Table</caption>
+          <image source="images/ascii01" width="70%"/>
+        </figure>
+        <exercise label="ASCII-HelloWorld-ex" platform="doenetml">
   <title>ASCII Representation</title>
   <dynamic>
     <statement> 
