@@ -443,7 +443,7 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
 <p>Q: Subtract the ASCII hex representation for “$secondChar” (in hex) from that for “$firstChar” (hex):</p>
 <p><textInput name="char1Representation" forAnswer="$dMinusoResponse"  width="19"><label>$firstChar</label><shortDescription>Code for 1st Character ($firstChar) requested</shortDescription></textInput> <m>-</m>
     <textInput name="char2Representation" forAnswer="$dMinusoResponse"  width="19"><label>$secondChar</label><shortDescription>Code for 2nd Character ($secondChar) requested</shortDescription></textInput> <m>=</m>
-    <textInput name="doDifferenceRepresentation" forAnswer="$dMinusoResponse"  width="19"><shortDescription>Code for Difference of Two Characters</shortDescription></textInput>(Difference) with Borrow out:
+    <textInput name="doDifferenceRepresentation" forAnswer="$dMinusoResponse"  width="19"><shortDescription>Code for Difference of Two Characters</shortDescription></textInput>(Difference) with Borrow in:
   <textInput name="doBorrowRepresentation" forAnswer="$dMinusoResponse"  width="15"><shortDescription>Code for the Borrow bit from Difference of Two Characters</shortDescription></textInput>
 </p>
 
