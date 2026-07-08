@@ -3,12 +3,9 @@
 <pretext>
     <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
         <title>ASCII-HelloWorld</title>
+      <p><url href="https://www.sciencebuddies.org/cdn/references/ascii-table.png" target="_blank">ASCII Table</url> </p>
       <p>Please be patient while the ASCII assignment for "Hello World" is generated.  
             This may take a few seconds. Then respond to each question in hexadecimal. </p>
-        <figure xml:id="fig-ASCII">
-          <caption>ASCII Translation Table</caption>
-          <image source="images/ascii01" width="70%"/>
-        </figure>
         <exercise label="ASCII-HelloWorld-ex" platform="doenetml">
   <title>ASCII Representation</title>
   <dynamic>
