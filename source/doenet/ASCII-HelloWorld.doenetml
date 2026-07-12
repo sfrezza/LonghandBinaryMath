@@ -1,13 +1,14 @@
 <!-- ASCII Assignment
      Steve Frezza, Franciscan University
      Last updated: 6/26 -->
-<!-- This can display a fragment of an ASCII table, and asks questions that use ASCII lookups in hex. -->
+<!-- This displays a fragment of an ASCII table, and asks six questions that use ASCII lookups in hex. -->
 <setup>
   <integer name="maxAttempts">1</integer>
 <integer name="maxNumHelloAttempts">$maxAttempts</integer>
 <integer name="maxNumWorldAttempts">$maxAttempts</integer>
 <integer name="maxCheckSumAttempts">$maxAttempts</integer>
 <integer name="maxCheckDifferenceAttempts">$maxAttempts</integer>
+<integer name="maxHWDifferenceAttempts">$maxAttempts</integer>
   
 <boolean name="showFeedback">true</boolean>
   
@@ -197,7 +198,7 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
 </p>
 </setup>
 
-<!-- Replace with an image of the ASCII table ... 
+<!-- Generates an ASCII table. Replaced with an image of the ASCII table below... 
 <table number="false">
   <title>ASCII 7-bit codes</title>
   <row>
@@ -229,7 +230,12 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
 </table>
 -->
 
+<image size="full" source="https://www.asciitable.com/asciifull.gif">
+  <shortDescription>An ASCII table showing 7-bit encodings</shortDescription></image>
+
+<section boxed>
 <!-- The "Hello" in "Hello World" part of the question -->
+  <title>Encoding: "Hello" & "World"</title>
 <p>Q: Convert “Hello” as ASCII text into hexadecimal format: </p>
 <p><textInput name="HelloInput1" forAnswer="$HelloResponse"  width="19"><shortDescription>Code for 1st Character</shortDescription></textInput>
     <textInput name="HelloInput2" forAnswer="$HelloResponse"  width="19"><shortDescription>Code for 2nd Character</shortDescription></textInput>
@@ -290,7 +296,7 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
 </p>
 </setup>
 
-<answer name="HelloResponse" submitLabel="Check Hex Digits" maxNumAttempts="$maxNumHelloAttempts">
+<answer name="HelloResponse" submitLabel="Check Hex Digits" disableAfterCorrect="true" maxNumAttempts="$maxNumHelloAttempts">
     <award name="AllCorrect" matchBlanks="false" credit="1">
       <when>
         <and>$Hello_Ans[1] $Hello_Ans[2] $Hello_Ans[3] $Hello_Ans[4] $Hello_Ans[5]</and>
@@ -326,7 +332,6 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
   <integer><module copy="$hexLookup" input="$WorldInput5.characters[2]"/> + 16 * <module copy="$hexLookup" input="$WorldInput5.characters[1]"/></integer> 
 </numberList></p>
 
-  
 <p><numberList name="CorrectWorldResp">
   <module copy="$ASCIItoDecimal" input="W"/>
   <module copy="$ASCIItoDecimal" input="o"/>
@@ -371,7 +376,7 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
 </p>
 </setup>
 
-<answer name="WorldResponse" submitLabel="Check Hex Digits" maxNumAttempts="$maxNumWorldAttempts">
+<answer name="WorldResponse" submitLabel="Check Hex Digits" disableAfterCorrect="true" maxNumAttempts="$maxNumWorldAttempts">
     <award name="AllCorrect" matchBlanks="false" credit="1">
       <when>
         <and>$World_Ans[1] $World_Ans[2] $World_Ans[3] $World_Ans[4] $World_Ans[5]</and>
@@ -391,9 +396,11 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
   </p>
 </feedback>
 </setup>
+</section>
 
-<p></p>
+<section boxed>
 <!-- Now questions that treat the characters in "Hello World" as unsigned integers -->
+  <title>Encoded Characters as Numbers</title>
 <setup>
 <integer name="LowerCaseAIndex"><module copy="$ASCIItoDecimal" input="a"/></integer>
 <integer name="LowerCaseZIndex"><module copy="$ASCIItoDecimal" input="z"/></integer>
@@ -432,7 +439,8 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
     <boolean>$CharSumHexResp[4] = $CorrectCarryResp</boolean> 
 </booleanList></p>
 </setup>
-<answer name="dPlusoResponse" submitLabel="Check Sum" maxNumAttempts="$maxCheckSumAttempts">
+
+<answer name="dPlusoResponse" submitLabel="Check Sum" disableAfterCorrect="true" maxNumAttempts="$maxCheckSumAttempts">
     <award name="CharSumCorrect" matchBlanks="false" credit="1">
       <when>
         <and>$doSum_Ans[1] $doSum_Ans[2] $doSum_Ans[3] $doSum_Ans[4] </and>
@@ -453,28 +461,141 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ ␡
   <integer><module copy="$hexLookup" input="$char2Representation.characters[2]"/> + 16 * <module copy="$hexLookup" input="$char2Representation.characters[1]"/></integer>
   <integer><module copy="$hexLookup" input="$doDifferenceRepresentation.characters[2]"/> + 16 * <module copy="$hexLookup" input="$doDifferenceRepresentation.characters[1]"/></integer>
   <integer><module copy="$hexLookup" input="$doBorrowRepresentation.characters[1]"/> </integer></numberList></p>
+</setup>
 
-<!-- Compute the correct Difference and carry out for the two characters -->
+<!-- Compute the correct Difference and Borrow In for the two characters -->
+<setup>
 <p>
 <integer name="CharDifference">$firstCharIndex - $secondCharIndex</integer>
-<integer name="CorrectBorrowResp"><floor>$CharDifference/(16^2)</floor></integer>
-<integer name="CorrectDifferenceResp">$CharDifference - $CorrectBorrowResp * (16^2)</integer>
+<integer name="CorrectBorrowResp"><abs><floor>$CharDifference/(16^2)</floor></abs></integer>
+<integer name="CorrectDifferenceResp">$CharDifference + $CorrectBorrowResp * (16^2)</integer>
 </p>
-
+<!-- The following fails when $secondCharIndex>$firstCharIndex -->
 <p><booleanList name="doDifference_Ans">
     <boolean>$CharSubtractHexResp[1] = $firstCharIndex</boolean>
     <boolean>$CharSubtractHexResp[2] = $secondCharIndex</boolean>
-    <boolean>$CharSubtractHexResp[3] = $CorrectDifferenceResp</boolean>
-    <boolean>$CharSubtractHexResp[4] = $CorrectCarryResp</boolean> 
+    <boolean>$CharSubtractHexResp[3] = $CorrectDifferenceResp</boolean> 
+    <boolean>$CharSubtractHexResp[4] = $CorrectBorrowResp</boolean> 
 </booleanList></p>
 </setup>
-<answer name="dMinusoResponse" submitLabel="Check Difference" maxNumAttempts="$maxCheckDifferenceAttempts">
+
+<answer name="dMinusoResponse" submitLabel="Check Difference" disableAfterCorrect="true" maxNumAttempts="$maxCheckDifferenceAttempts">
     <award name="CharDifferenceCorrect" matchBlanks="false" credit="1">
       <when>
         <and>$doDifference_Ans[1] $doDifference_Ans[2] $doDifference_Ans[3] $doDifference_Ans[4] </and>
       </when></award>
   </answer><br/>
+</section>
 
+<!-- Compute the arithmetic difference of two multi-word strings -->
+<setup>
+<boolean name="showMultiwordProblem"><not>$WorldResponse.disabled</not> and <not>$HelloResponse.disabled</not></boolean>
+</setup>
 
+<section boxed hide="$showMultiwordProblem"> 
+  <title>Multi Word Arithmetic</title>
+<p>Q: Subtract the ASCII hex representation for “Hello” from that for “World”. Show the borrow in bits for each word:</p>
 
+<tabular>
+  <row>
+    <cell><textInput name="BorrowInput5" forAnswer="$HWBorrowsResponse"  width="19"><shortDescription>5th (MSW) Borrow Bit </shortDescription></textInput> </cell>
+    <cell><textInput name="BorrowInput4" forAnswer="$HWBorrowsResponse"  width="19"><shortDescription>4th Borrow Bit</shortDescription></textInput></cell>
+    <cell><textInput name="BorrowInput3" forAnswer="$HWBorrowsResponse"  width="19"><shortDescription>3rd Borrow Bit</shortDescription></textInput></cell>
+    <cell><textInput name="BorrowInput2" forAnswer="$HWBorrowsResponse"  width="19"><shortDescription>2nd Borrow Bit</shortDescription></textInput></cell>
+    <cell><textInput name="BorrowInput1" forAnswer="$HWBorrowsResponse"  width="19"><shortDescription>1st (LSW) Borrow Bit</shortDescription></textInput> </cell>
+    <cell></cell>
+    <cell></cell>
+  </row>
+  
+  <row><cell><m></m></cell>
+    <cell><module copy="$hexConversion" input="$CorrectWorldResp[5]"/>(W)</cell>
+    <cell><module copy="$hexConversion" input="$CorrectWorldResp[4]"/>(o)</cell>
+    <cell><module copy="$hexConversion" input="$CorrectWorldResp[3]"/>(r)</cell>
+    <cell><module copy="$hexConversion" input="$CorrectWorldResp[2]"/>(l)</cell>
+    <cell><module copy="$hexConversion" input="$CorrectWorldResp[1]"/>(d)</cell>
+    <cell></cell>
+  </row>
+  
+  <row><cell bottom="minor"><m>-</m></cell>
+    <cell bottom="minor"><module copy="$hexConversion" input="$CorrectHelloResp[5]"/>(H)</cell>
+    <cell bottom="minor"><module copy="$hexConversion" input="$CorrectHelloResp[4]"/>(e)</cell>
+    <cell bottom="minor"><module copy="$hexConversion" input="$CorrectHelloResp[3]"/>(l)</cell>
+    <cell bottom="minor"><module copy="$hexConversion" input="$CorrectHelloResp[2]"/>(l)</cell>
+    <cell bottom="minor"><module copy="$hexConversion" input="$CorrectHelloResp[1]"/>(o)</cell>
+    <cell></cell>
+  </row>
+  
+  <row><cell></cell>
+    <cell><textInput name="SumInput5Resp" forAnswer="$HWDiffResponse"  width="19"><label></label><shortDescription>Code for 5th sum word (MSW)</shortDescription></textInput> </cell>
+    <cell><textInput name="SumInput4Resp" forAnswer="$HWDiffResponse"  width="19"><label></label><shortDescription>Code for 4th sum word </shortDescription></textInput></cell>
+    <cell><textInput name="SumInput3Resp" forAnswer="$HWDiffResponse"  width="19"><label></label><shortDescription>Code for 3rd sum word </shortDescription></textInput></cell>
+    <cell><textInput name="SumInput2Resp" forAnswer="$HWDiffResponse"  width="19"><label></label><shortDescription>Code for 2nd sum word </shortDescription></textInput></cell>
+    <cell><textInput name="SumInput1Resp" forAnswer="$HWDiffResponse"  width="19"><label></label><shortDescription>Code for 1st sum word (LSW)</shortDescription></textInput> </cell>
+    <cell></cell>
+  </row>
+</tabular>
 
+  <setup>
+    <p><textList name="CorrectSumWords">0f 0a 06 00 f5</textList></p>
+    <p><textList name="CorrectBorrows">0 0 0 0 1</textList></p>
+  
+  <boolean name="HWDiffCorrect">
+    <and>
+          <boolean caseInsensitiveMatch>($SumInput1Resp = $CorrectSumWords[1]) </boolean>
+          <boolean caseInsensitiveMatch>($SumInput2Resp = $CorrectSumWords[2])</boolean>
+          <boolean caseInsensitiveMatch>($SumInput3Resp = $CorrectSumWords[3])</boolean>
+          <boolean caseInsensitiveMatch>($SumInput4Resp = $CorrectSumWords[4]) </boolean>
+          <boolean caseInsensitiveMatch>($SumInput5Resp = $CorrectSumWords[5]) </boolean> </and>
+  </boolean>
+  <boolean name="HWBorrowsCorrect"><and>
+     <boolean caseInsensitiveMatch>($BorrowInput1 = $CorrectBorrows[1]) </boolean>
+    <boolean caseInsensitiveMatch>($BorrowInput2 = $CorrectBorrows[2])</boolean>
+    <boolean caseInsensitiveMatch>($BorrowInput3 = $CorrectBorrows[3])</boolean>
+    <boolean caseInsensitiveMatch>($BorrowInput4 = $CorrectBorrows[4])</boolean>
+    <boolean caseInsensitiveMatch>($BorrowInput5 = $CorrectBorrows[5])</boolean>
+  </and></boolean>
+</setup>
+  
+<p><answer name="HWDiffResponse" submitLabel="Check Differences" disableAfterCorrect="true" maxNumAttempts="$maxHWDifferenceAttempts">
+    <award name="HWDiffComputedCorrectly" matchBlanks="false" credit="1">
+      <when> $HWDiffCorrect </when></award>
+</answer></p>
+<p><answer name="HWBorrowsResponse" submitLabel="Check Borrow Bits" disableAfterCorrect="true" maxNumAttempts="$maxHWDifferenceAttempts">
+    <award name="HWBorrowsComputedCorrectly" matchBlanks="false" credit="1">
+      <when> $HWBorrowsCorrect </when></award>
+</answer></p>
+
+<setup>  
+<boolean name="doneResponding">
+  $dMinusoResponse.disabled and 
+  $dPlusoResponse.disabled and 
+  $WorldResponse.disabled and
+  $HelloResponse.disabled and 
+  $HWDiffResponse.disabled and
+  $HWBorrowsResponse.disabled
+</boolean>
+</setup>
+
+<feedback condition="$doneResponding">
+  <setup>
+    <integer name="totalScore">
+  $dMinusoResponse.creditAchieved + 
+  $dPlusoResponse.creditAchieved +
+  $WorldResponse.creditAchieved +
+  $HelloResponse.creditAchieved + 
+  $HWDiffResponse.creditAchieved +
+  $HWBorrowsResponse.creditAchieved
+</integer>
+
+<integer name="Possible">
+  $dMinusoResponse.weight + 
+  $dPlusoResponse.weight +
+  $WorldResponse.weight +
+  $HelloResponse.weight + 
+  $HWDiffResponse.weight +
+  $HWBorrowsResponse.weight
+</integer>
+  </setup>
+  Your total score is $totalScore of $Possible. Thank you for answering all questions; You may navigate away from the page.</feedback>
+
+</section>
