@@ -2,15 +2,10 @@
 <!-- to build: pretext build HelloWorld-SCORM where this tag is identified in the "project.ptx" file -->
 <pretext>
     <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <title>ASCII-HelloWorld</title>
-      <p><image source="../assets/ascii-table.png">
-        <shortdescription>7-Bit ASCII table showing hex codes</shortdescription>
-        </image>
-        <url href="https://www.sciencebuddies.org/cdn/references/ascii-table.png" target="_blank">Link to an ASCII Table</url> </p>
+      <title>ASCII-HelloWorld</title>
       <p>Please be patient while the ASCII assignment for "Hello World" is generated.  
             This may take a few seconds. Then respond to each question in hexadecimal. </p>
         <exercise label="ASCII-HelloWorld-ex" platform="doenetml">
-  <title>ASCII Representation</title>
   <dynamic>
     <statement> 
        <interactive label="ASCII-HelloWorld" platform="doenetml">
