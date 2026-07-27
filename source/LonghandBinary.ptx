@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- to build: pretext build HelloWorld-SCORM where this tag is identified in the "project.ptx" file -->
+<pretext>
+    <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <title>LonghandBinary</title>
+      <p>Please be patient while the LonghandBinary assignment for "Hello World" is generated.  
+            This may take a few seconds. Then respond to each question in hexadecimal. </p>
+        <exercise label="LonghandBinary-ex" platform="doenetml">
+  <dynamic>
+    <statement> 
+       <interactive label="LonghandBinary" platform="doenetml">
+        <slate surface="doenetml">  
+          <xi:include href="doenet/6x-signed-hex-assignment.doenetml" parse="text"/>
+        </slate>  
+      </interactive> 
+    </statement>
+  </dynamic>
+  <static/>
+</exercise>
+
+    </article>
+</pretext>
