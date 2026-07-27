@@ -3,8 +3,8 @@
 <pretext>
     <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
       <title>LonghandBinary</title>
-      <p>Please be patient while the LonghandBinary assignment for "Hello World" is generated.  
-            This may take a few seconds. Then respond to each question in hexadecimal. </p>
+      <p>Please be patient while the Longhand Binary assignment for is generated.  
+            This may take a few seconds. Then respond to each of the six question in hexadecimal. </p>
         <exercise label="LonghandBinary-ex" platform="doenetml">
   <dynamic>
     <statement> 
