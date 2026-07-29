@@ -2,7 +2,7 @@
 <!-- to build: pretext build HelloWorld-SCORM where this tag is identified in the "project.ptx" file -->
 <pretext>
     <article xml:id="blah" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <title>LonghandBinary</title>
+      <title>Longhand Binary</title>
       <p>Please be patient while the Longhand Binary assignment for is generated.  
             This may take a few seconds. Then respond to each of the six question in hexadecimal. </p>
         <exercise label="LonghandBinary-ex" platform="doenetml">
